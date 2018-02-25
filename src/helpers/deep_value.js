@@ -15,14 +15,19 @@ const deepValue = (obj, path, list) => {
     }
 
     const value = obj[firstSegment]
-    
+
     if (value !== null && value !== undefined) {
       if (!remaining && (typeof value === 'string' || typeof value === 'number')) {
         list.push(value.toString())
       } else if (isArray(value)) {
-        // Search each item in the array.
-        for (let i = 0, len = value.length; i < len; i += 1) {
-          deepValue(value[i], remaining, list)
+        // if the first value is a string, we assume it's a flattened array
+        if (typeof value[0] === 'string') {
+          list.push(value)
+        } else {
+          // Search each item in the array.
+          for (let i = 0, len = value.length; i < len; i += 1) {
+            deepValue(value[i], remaining, list)
+          }
         }
       } else if (remaining) {
         // An object. Recurse further.

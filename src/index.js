@@ -132,11 +132,11 @@ class Fuse {
           record: i,
           index: i
         }, {
-          resultMap,
-          results,
-          tokenSearchers,
-          fullSearcher
-        })
+            resultMap,
+            results,
+            tokenSearchers,
+            fullSearcher
+          })
       }
 
       return { weights: null, results }
@@ -170,11 +170,11 @@ class Fuse {
           record: item,
           index: i
         }, {
-          resultMap,
-          results,
-          tokenSearchers,
-          fullSearcher
-        })
+            resultMap,
+            results,
+            tokenSearchers,
+            fullSearcher
+          })
       }
     }
 
@@ -286,18 +286,35 @@ class Fuse {
       }
     } else if (isArray(value)) {
       for (let i = 0, len = value.length; i < len; i += 1) {
-        this._analyze({
-          key,
-          arrayIndex: i,
-          value: value[i],
-          record,
-          index
-        }, {
-          resultMap,
-          results,
-          tokenSearchers,
-          fullSearcher
-        })
+        if (isArray(value[i])) {
+          for (let j = 0, jlen = value[i].length; j < jlen; j += 1) {
+            this._analyze({
+              key,
+              arrayIndex: j,
+              value: value[i][j],
+              record,
+              index
+            }, {
+                resultMap,
+                results,
+                tokenSearchers,
+                fullSearcher
+              })
+          }
+        } else {
+          this._analyze({
+            key,
+            arrayIndex: i,
+            value: value[i],
+            record,
+            index
+          }, {
+              resultMap,
+              results,
+              tokenSearchers,
+              fullSearcher
+            })
+        }
       }
     }
   }
